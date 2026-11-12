@@ -136,59 +136,62 @@
 
   
 
+
 <footer>
   AbsensiKu · Sistem Absensi Pekerja Proyek
   <div style="font-size:10px; color:#8a9691; margin-top:6px;">
     Dibuat oleh Power Lumbanbatu
   </div>
 </footer>
-</body>
 
+<script>
+  let gps = null;
 
+  document.getElementById("gpsButton").addEventListener("click", () => {
+    const status = document.getElementById("gpsStatus");
 
-  <script>
-    let gps = null;
+    if (!navigator.geolocation) {
+      status.textContent = "Browser tidak mendukung GPS.";
+      return;
+    }
 
-    document.getElementById("gpsButton").addEventListener("click", () => {
-      const status = document.getElementById("gpsStatus");
-      if (!navigator.geolocation) {
-        status.textContent = "Browser tidak mendukung GPS.";
-        return;
-      }
-      status.textContent = "Meminta izin lokasi...";
-      navigator.geolocation.getCurrentPosition(
-        position => {
-          gps = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude
-          };
-          status.textContent =
-            "Lokasi berhasil diambil: " +
-            gps.latitude.toFixed(5) + ", " +
-            gps.longitude.toFixed(5);
-        },
-        () => {
-          status.textContent =
-            "Lokasi tidak tersedia. Periksa izin lokasi browser.";
-        },
-        { enableHighAccuracy: true, timeout: 15000 }
-      );
-    });
+    status.textContent = "Meminta izin lokasi...";
 
-    document.getElementById("attendanceForm").addEventListener("submit", event => {
-      event.preventDefault();
-      const photo = document.getElementById("photo").files[0];
-      const message = document.getElementById("message");
+    navigator.geolocation.getCurrentPosition(
+      position => {
+        gps = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude
+        };
 
-      if (!photo) {
-        message.textContent = "Pilih foto terlebih dahulu.";
-        return;
-      }
+        status.textContent =
+          "Lokasi berhasil diambil: " +
+          gps.latitude.toFixed(5) + ", " +
+          gps.longitude.toFixed(5);
+      },
+      () => {
+        status.textContent =
+          "Lokasi tidak tersedia. Periksa izin lokasi browser.";
+      },
+      { enableHighAccuracy: true, timeout: 15000 }
+    );
+  });
 
-      message.textContent =
-        "Form berhasil diperiksa di perangkat ini. Data BELUM disimpan " +
-        "ke database dan belum menjadi absensi resmi.";
-    });
-  </script>
+  document.getElementById("attendanceForm").addEventListener("submit", event => {
+    event.preventDefault();
+
+    const photo = document.getElementById("photo").files[0];
+    const message = document.getElementById("message");
+
+    if (!photo) {
+      message.textContent = "Pilih foto terlebih dahulu.";
+      return;
+    }
+
+    message.textContent =
+      "Form berhasil diperiksa di perangkat ini. Data BELUM disimpan " +
+      "ke database dan belum menjadi absensi resmi.";
+  });
+</script>
 </body>
 </html>
