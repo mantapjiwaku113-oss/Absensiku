@@ -1,0 +1,184 @@
+
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#123b32">
+  <title>AbsensiKu - Absensi Pekerja</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f1f5f4;
+      color: #172b27;
+    }
+    header {
+      background: #123b32;
+      color: white;
+      padding: 24px 18px;
+    }
+    header h1 { margin: 0 0 6px; }
+    header p { margin: 0; color: #d3e6df; }
+    main {
+      max-width: 650px;
+      margin: 22px auto;
+      padding: 0 14px;
+    }
+    .card {
+      background: white;
+      padding: 20px;
+      border-radius: 14px;
+      margin-bottom: 16px;
+      box-shadow: 0 3px 14px #173b3210;
+    }
+    h2 { margin-top: 0; font-size: 19px; }
+    label {
+      display: block;
+      font-weight: bold;
+      margin: 14px 0 6px;
+    }
+    input, select, textarea, button {
+      width: 100%;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+    input, select, textarea {
+      border: 1px solid #cbd5d1;
+      background: white;
+    }
+    button {
+      border: 0;
+      background: #167456;
+      color: white;
+      font-weight: bold;
+      margin-top: 14px;
+      cursor: pointer;
+    }
+    .secondary { background: #294d44; }
+    .note {
+      font-size: 13px;
+      color: #596b65;
+      line-height: 1.5;
+    }
+    #message {
+      margin-top: 14px;
+      font-weight: bold;
+      overflow-wrap: anywhere;
+    }
+    footer {
+      text-align: center;
+      padding: 20px;
+      color: #63746e;
+      font-size: 13px;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>AbsensiKu</h1>
+    <p>Absensi pekerja dan pengelolaan proyek</p>
+  </header>
+
+  <main>
+    <section class="card">
+      <h2>Selamat Datang</h2>
+      <p>Platform pencatatan kehadiran pekerja proyek.</p>
+      <p class="note">
+        Tampilan awal ini belum terhubung ke database.
+        Login dan penyimpanan absensi akan diaktifkan setelah
+        konfigurasi keamanan selesai.
+      </p>
+    </section>
+
+    <section class="card">
+      <h2>Form Absensi</h2>
+      <form id="attendanceForm">
+        <label for="worker">Kode pekerja</label>
+        <input id="worker" required placeholder="Contoh: P001">
+
+        <label for="project">Nama proyek</label>
+        <input id="project" required placeholder="Nama proyek">
+
+        <label for="type">Jenis absensi</label>
+        <select id="type" required>
+          <option value="masuk">Absen Masuk</option>
+          <option value="pulang">Absen Pulang</option>
+        </select>
+
+        <label for="photo">Foto bukti absensi</label>
+        <input id="photo" type="file" accept="image/*" capture="environment" required>
+
+        <label for="notes">Catatan</label>
+        <textarea id="notes" rows="3" placeholder="Catatan tambahan"></textarea>
+
+        <button type="button" id="gpsButton" class="secondary">
+          Ambil Lokasi GPS
+        </button>
+        <p id="gpsStatus" class="note">Lokasi belum diambil.</p>
+
+        <button type="submit">Periksa Form Absensi</button>
+        <p id="message" role="status"></p>
+      </form>
+    </section>
+
+    <section class="card">
+      <h2>Panel Admin</h2>
+      <p class="note">
+        Panel admin akan menyediakan login email dan password,
+        pengelolaan pekerja, proyek, serta laporan kehadiran.
+        Fitur ini belum diaktifkan.
+      </p>
+    </section>
+  </main>
+
+  <footer>AbsensiKu · Sistem Absensi Pekerja Proyek</footer>
+
+  <script>
+    let gps = null;
+
+    document.getElementById("gpsButton").addEventListener("click", () => {
+      const status = document.getElementById("gpsStatus");
+      if (!navigator.geolocation) {
+        status.textContent = "Browser tidak mendukung GPS.";
+        return;
+      }
+      status.textContent = "Meminta izin lokasi...";
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          gps = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+          };
+          status.textContent =
+            "Lokasi berhasil diambil: " +
+            gps.latitude.toFixed(5) + ", " +
+            gps.longitude.toFixed(5);
+        },
+        () => {
+          status.textContent =
+            "Lokasi tidak tersedia. Periksa izin lokasi browser.";
+        },
+        { enableHighAccuracy: true, timeout: 15000 }
+      );
+    });
+
+    document.getElementById("attendanceForm").addEventListener("submit", event => {
+      event.preventDefault();
+      const photo = document.getElementById("photo").files[0];
+      const message = document.getElementById("message");
+
+      if (!photo) {
+        message.textContent = "Pilih foto terlebih dahulu.";
+        return;
+      }
+
+      message.textContent =
+        "Form berhasil diperiksa di perangkat ini. Data BELUM disimpan " +
+        "ke database dan belum menjadi absensi resmi.";
+    });
+  </script>
+</body>
+</html>
