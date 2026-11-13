@@ -281,6 +281,20 @@
     <label for="workerCode">Kode Pekerja</label>
     <input id="workerCode" type="text"
       placeholder="Contoh: PKJ001" required>
+    
+<label for="workerPin">PIN Pekerja (6 angka)</label>
+<input
+  id="workerPin"
+  type="password"
+  inputmode="numeric"
+  pattern="[0-9]{6}"
+  minlength="6"
+  maxlength="6"
+  placeholder="Buat PIN 6 angka"
+  autocomplete="new-password"
+  required
+>
+    
 
     <label for="workerName">Nama Lengkap</label>
     <input id="workerName" type="text"
