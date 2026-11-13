@@ -548,18 +548,6 @@ await loadWorkers();
       
 
      
-if (error) {
-  console.error("Error simpan pekerja:", error);
-  message.textContent =
-    "Gagal: " + error.message + " (kode: " + error.code + ")";
-  return;
-}
-      
-
-      form.reset();
-      message.textContent = "Pekerja berhasil disimpan!";
-      await loadWorkers();
-
     } catch (error) {
       console.error(error);
       message.textContent = "Terjadi kesalahan. Silakan coba lagi.";
