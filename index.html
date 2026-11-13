@@ -516,14 +516,14 @@
         is_active: true
       });
 
-      if (error) {
-        console.error(error);
-        message.textContent =
-          error.code === "23505"
-            ? "Kode pekerja sudah digunakan."
-            : "Gagal menyimpan. Periksa struktur tabel workers.";
-        return;
-      }
+     
+if (error) {
+  console.error("Error simpan pekerja:", error);
+  message.textContent =
+    "Gagal: " + error.message + " (kode: " + error.code + ")";
+  return;
+}
+      
 
       form.reset();
       message.textContent = "Pekerja berhasil disimpan!";
