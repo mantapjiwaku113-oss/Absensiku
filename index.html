@@ -273,6 +273,30 @@
   </form>
 </section>
     
+<section class="card" id="workerManagement" hidden>
+  <h2>Data Pekerja</h2>
+  <p class="note">Tambah pekerja dan lihat daftar pekerja.</p>
+
+  <form id="workerForm">
+    <label for="workerCode">Kode Pekerja</label>
+    <input id="workerCode" type="text"
+      placeholder="Contoh: PKJ001" required>
+
+    <label for="workerName">Nama Lengkap</label>
+    <input id="workerName" type="text"
+      placeholder="Nama pekerja" required>
+
+    <button type="submit" id="saveWorkerButton">
+      Simpan Pekerja
+    </button>
+
+    <p id="workerMessage" class="note" role="status"></p>
+  </form>
+
+  <h3>Daftar Pekerja</h3>
+  <div id="workerList">Login sebagai admin untuk melihat data.</div>
+</section>
+
   </main>
 
   
