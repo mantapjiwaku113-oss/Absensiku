@@ -308,43 +308,7 @@
   });
 </script>
   
-<script>
-(async function () {
-  const projectUrl = "https://bkdativyeegeuexeaggd.supabase.co";
-  const publishableKey = prompt(
-    "Masukkan Supabase Publishable Key untuk tes koneksi:"
-  );
 
-  if (!publishableKey) {
-    console.log("Tes koneksi dibatalkan.");
-    return;
-  }
-
-  try {
-    const response = await fetch(
-      projectUrl + "/auth/v1/health",
-      {
-        method: "GET",
-        headers: {
-          apikey: publishableKey
-        }
-      }
-    );
-
-    if (response.ok) {
-      alert("Supabase dapat dijangkau. Berikutnya kita uji akses database.");
-    } else {
-      alert(
-        "Tes belum berhasil. Kode respons: " + response.status +
-        ". Periksa kembali Publishable Key."
-      );
-    }
-  } catch (error) {
-    alert("Koneksi gagal. Periksa internet dan alamat Supabase.");
-    console.error(error);
-  }
-})();
-  </script>
   
 </body>
 </html>
