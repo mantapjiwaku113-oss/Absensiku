@@ -238,14 +238,41 @@
       </form>
     </section>
 
-    <section class="card">
-      <h2>Panel Admin</h2>
-      <p class="note">
-        Panel admin akan menyediakan login email dan password,
-        pengelolaan pekerja, proyek, serta laporan kehadiran.
-        Fitur ini belum diaktifkan.
-      </p>
-    </section>
+    
+<section class="card">
+  <h2>Panel Admin</h2>
+  <p class="note">
+    Masuk menggunakan akun admin AbsensiKu untuk mengelola
+    pekerja, proyek, dan laporan kehadiran.
+  </p>
+
+  <form id="adminLoginForm">
+    <label for="adminEmail">Email admin</label>
+    <input
+      id="adminEmail"
+      type="email"
+      autocomplete="username"
+      placeholder="Masukkan email admin"
+      required
+    >
+
+    <label for="adminPassword">Password admin</label>
+    <input
+      id="adminPassword"
+      type="password"
+      autocomplete="current-password"
+      placeholder="Masukkan password"
+      required
+    >
+
+    <button type="submit" id="adminLoginButton">
+      Masuk sebagai Admin
+    </button>
+
+    <p id="adminLoginMessage" class="note" role="status"></p>
+  </form>
+</section>
+    
   </main>
 
   
