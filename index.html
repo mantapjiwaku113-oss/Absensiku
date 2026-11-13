@@ -6,75 +6,189 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="theme-color" content="#123b32">
   <title>AbsensiKu - Absensi Pekerja</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f1f5f4;
-      color: #172b27;
+
+<style>
+  * {
+    box-sizing: border-box;
+  }
+
+  :root {
+    --navy: #0b1425;
+    --navy-light: #14233a;
+    --gold: #d8b56d;
+    --gold-light: #f4dfaa;
+    --text: #f5f3ee;
+    --muted: #b7c1d0;
+    --glass: rgba(255, 255, 255, 0.065);
+    --border: rgba(216, 181, 109, 0.24);
+  }
+
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background:
+      radial-gradient(ellipse at top, #253653 0%, transparent 48%),
+      linear-gradient(145deg, #080e19, var(--navy) 55%, #111d30);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  header {
+    padding: 30px 20px;
+    text-align: center;
+    background: rgba(8, 14, 25, 0.7);
+    border-bottom: 1px solid var(--border);
+    box-shadow: 0 5px 30px rgba(216, 181, 109, 0.08);
+  }
+
+  header h1 {
+    margin: 0 0 8px;
+    font-size: 32px;
+    letter-spacing: 1.5px;
+    color: var(--gold-light);
+    text-shadow: 0 0 20px rgba(216, 181, 109, 0.25);
+  }
+
+  header p {
+    margin: 0;
+    color: var(--muted);
+    line-height: 1.6;
+  }
+
+  main {
+    max-width: 650px;
+    margin: 28px auto;
+    padding: 0 15px;
+  }
+
+  .card {
+    background: var(--glass);
+    border: 1px solid var(--border);
+    padding: 22px;
+    border-radius: 18px;
+    margin-bottom: 18px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    animation: appear 0.55s ease both;
+  }
+
+  .card:nth-child(2) {
+    animation-delay: 0.08s;
+  }
+
+  .card:nth-child(3) {
+    animation-delay: 0.16s;
+  }
+
+  h2 {
+    margin-top: 0;
+    font-size: 20px;
+    color: var(--gold-light);
+  }
+
+  label {
+    display: block;
+    font-weight: bold;
+    margin: 16px 0 7px;
+    color: #e9dfca;
+  }
+
+  input, select, textarea, button {
+    width: 100%;
+    padding: 13px;
+    border-radius: 10px;
+    font-size: 16px;
+    font-family: inherit;
+  }
+
+  input, select, textarea {
+    border: 1px solid rgba(216, 181, 109, 0.22);
+    background: rgba(7, 13, 24, 0.72);
+    color: var(--text);
+    outline: none;
+  }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(216, 181, 109, 0.1);
+  }
+
+  input::placeholder, textarea::placeholder {
+    color: #8490a1;
+  }
+
+  input[type="file"] {
+    font-size: 14px;
+  }
+
+  button {
+    border: 1px solid rgba(255, 232, 183, 0.35);
+    background: linear-gradient(135deg, #f0d59a, #bb9147);
+    color: #172033;
+    font-weight: bold;
+    margin-top: 14px;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  button:active {
+    transform: scale(0.98);
+  }
+
+  button:hover {
+    box-shadow: 0 0 20px rgba(216, 181, 109, 0.2);
+  }
+
+  button.secondary {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--border);
+    color: var(--gold-light);
+  }
+
+  .note {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+  }
+
+  #message {
+    margin-top: 14px;
+    font-weight: bold;
+    overflow-wrap: anywhere;
+    color: var(--gold-light);
+    line-height: 1.6;
+  }
+
+  footer {
+    text-align: center;
+    padding: 25px 16px;
+    color: var(--muted);
+    font-size: 13px;
+    border-top: 1px solid var(--border);
+    background: rgba(5, 10, 18, 0.4);
+    line-height: 1.6;
+  }
+
+  @keyframes appear {
+    from {
+      opacity: 0;
+      transform: translateY(12px);
     }
-    header {
-      background: #123b32;
-      color: white;
-      padding: 24px 18px;
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
-    header h1 { margin: 0 0 6px; }
-    header p { margin: 0; color: #d3e6df; }
-    main {
-      max-width: 650px;
-      margin: 22px auto;
-      padding: 0 14px;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+      animation: none !important;
+      transition: none !important;
     }
-    .card {
-      background: white;
-      padding: 20px;
-      border-radius: 14px;
-      margin-bottom: 16px;
-      box-shadow: 0 3px 14px #173b3210;
-    }
-    h2 { margin-top: 0; font-size: 19px; }
-    label {
-      display: block;
-      font-weight: bold;
-      margin: 14px 0 6px;
-    }
-    input, select, textarea, button {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      font-size: 16px;
-    }
-    input, select, textarea {
-      border: 1px solid #cbd5d1;
-      background: white;
-    }
-    button {
-      border: 0;
-      background: #167456;
-      color: white;
-      font-weight: bold;
-      margin-top: 14px;
-      cursor: pointer;
-    }
-    .secondary { background: #294d44; }
-    .note {
-      font-size: 13px;
-      color: #596b65;
-      line-height: 1.5;
-    }
-    #message {
-      margin-top: 14px;
-      font-weight: bold;
-      overflow-wrap: anywhere;
-    }
-    footer {
-      text-align: center;
-      padding: 20px;
-      color: #63746e;
-      font-size: 13px;
-    }
-  </style>
+  }
+    </style>
+  
 </head>
 <body>
   <header>
