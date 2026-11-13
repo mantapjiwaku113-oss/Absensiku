@@ -347,6 +347,61 @@
 
   console.log("AbsensiKu: klien Supabase siap.");
 </script>
+
+
+  
+<script>
+  const adminLoginForm = document.getElementById("adminLoginForm");
+
+  if (adminLoginForm) {
+    adminLoginForm.addEventListener("submit", async function (event) {
+      event.preventDefault();
+
+      const message = document.getElementById("adminLoginMessage");
+      const button = document.getElementById("adminLoginButton");
+      const email = document.getElementById("adminEmail").value.trim();
+      const password = document.getElementById("adminPassword").value;
+
+      button.disabled = true;
+      message.textContent = "Memeriksa akun...";
+
+      try {
+        const client = window.absensikuSupabase;
+
+        const { data, error } = await client.auth.signInWithPassword({
+          email,
+          password
+        });
+
+        if (error) {
+          message.textContent = "Login gagal. Periksa email dan password.";
+          return;
+        }
+
+        const { data: roleData, error: roleError } = await client
+          .from("user_roles")
+          .select("role")
+          .eq("user_id", data.user.id)
+          .maybeSingle();
+
+        if (roleError || !roleData || roleData.role !== "admin") {
+          await client.auth.signOut();
+          message.textContent = "Akun ini tidak memiliki akses admin.";
+          return;
+        }
+
+        message.textContent =
+          "Login berhasil! Selamat datang, Admin AbsensiKu.";
+
+      } catch (error) {
+        message.textContent = "Terjadi kesalahan koneksi. Coba lagi.";
+        console.error(error);
+      } finally {
+        button.disabled = false;
+      }
+    });
+  }
+</script>
   
 </body>
 </html>
