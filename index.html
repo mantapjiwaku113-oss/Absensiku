@@ -426,6 +426,128 @@
     });
   }
 </script>
+
   
+<script>
+(function () {
+  const client = window.absensikuSupabase;
+  const section = document.getElementById("workerManagement");
+  const form = document.getElementById("workerForm");
+  const message = document.getElementById("workerMessage");
+  const list = document.getElementById("workerList");
+  const button = document.getElementById("saveWorkerButton");
+
+  if (!client || !section || !form) return;
+
+  async function verifyAdmin() {
+    const { data: sessionData, error: sessionError } =
+      await client.auth.getSession();
+
+    if (sessionError || !sessionData.session) {
+      section.hidden = true;
+      return false;
+    }
+
+    const { data: role, error } = await client
+      .from("user_roles")
+      .select("role")
+      .eq("user_id", sessionData.session.user.id)
+      .maybeSingle();
+
+    if (error || !role || role.role !== "admin") {
+      section.hidden = true;
+      return false;
+    }
+
+    section.hidden = false;
+    return true;
+  }
+
+  async function loadWorkers() {
+    list.textContent = "Memuat data pekerja...";
+
+    const { data, error } = await client
+      .from("workers")
+      .select("worker_code, full_name, is_active")
+      .order("worker_code");
+
+    if (error) {
+      list.textContent = "Gagal memuat pekerja. Periksa izin database.";
+      console.error(error);
+      return;
+    }
+
+    list.replaceChildren();
+
+    if (!data || data.length === 0) {
+      list.textContent = "Belum ada pekerja.";
+      return;
+    }
+
+    data.forEach(function (worker) {
+      const item = document.createElement("p");
+      item.textContent =
+        worker.worker_code + " — " + worker.full_name +
+        (worker.is_active ? " (Aktif)" : " (Nonaktif)");
+      list.appendChild(item);
+    });
+  }
+
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+    button.disabled = true;
+
+    try {
+      if (!(await verifyAdmin())) {
+        message.textContent = "Silakan login sebagai admin terlebih dahulu.";
+        return;
+      }
+
+      const workerCode =
+        document.getElementById("workerCode").value.trim();
+      const fullName =
+        document.getElementById("workerName").value.trim();
+
+      message.textContent = "Menyimpan pekerja...";
+
+      const { error } = await client.from("workers").insert({
+        worker_code: workerCode,
+        full_name: fullName,
+        is_active: true
+      });
+
+      if (error) {
+        console.error(error);
+        message.textContent =
+          error.code === "23505"
+            ? "Kode pekerja sudah digunakan."
+            : "Gagal menyimpan. Periksa struktur tabel workers.";
+        return;
+      }
+
+      form.reset();
+      message.textContent = "Pekerja berhasil disimpan!";
+      await loadWorkers();
+
+    } catch (error) {
+      console.error(error);
+      message.textContent = "Terjadi kesalahan. Silakan coba lagi.";
+    } finally {
+      button.disabled = false;
+    }
+  });
+
+  client.auth.onAuthStateChange(function () {
+    setTimeout(async function () {
+      if (await verifyAdmin()) await loadWorkers();
+    }, 0);
+  });
+
+  verifyAdmin().then(async function (isAdmin) {
+    if (isAdmin) await loadWorkers();
+  });
+})();
+</script>
+
 </body>
 </html>
