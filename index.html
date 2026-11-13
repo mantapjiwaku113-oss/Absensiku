@@ -524,11 +524,28 @@
 
       message.textContent = "Menyimpan pekerja...";
 
-      const { error } = await client.from("workers").insert({
-        worker_code: workerCode,
-        full_name: fullName,
-        is_active: true
-      });
+      
+const workerPin = document.getElementById("workerPin").value;
+
+message.textContent = "Menyimpan pekerja...";
+
+const { error } = await client.rpc("admin_create_worker", {
+  p_worker_code: workerCode,
+  p_full_name: fullName,
+  p_pin: workerPin
+});
+
+if (error) {
+  console.error("Error simpan pekerja:", error);
+  message.textContent =
+    "Gagal: " + error.message + " (kode: " + error.code + ")";
+  return;
+}
+
+form.reset();
+message.textContent = "Pekerja berhasil disimpan!";
+await loadWorkers();
+      
 
      
 if (error) {
